@@ -1,5 +1,5 @@
 <!--suppress HtmlDeprecatedAttribute -->
-<h1 align="center">Qoinify 🪙</h1>
+<h1 align="center">Qoinify 💰</h1>
 
 > Qoinify is a unique cryptocurrency exchange platform designed specifically for educational purposes.
 
