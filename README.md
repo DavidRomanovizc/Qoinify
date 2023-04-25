@@ -2,6 +2,7 @@
 <h1 align="center">Qoinify 💰</h1>
 
 > Qoinify is a unique cryptocurrency exchange platform designed specifically for educational purposes.
+> The main goal is to trade ERC20 tokens from our Ganache sandboxes environment.
 
 ## Matching Engine
 
