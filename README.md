@@ -1,7 +1,7 @@
-<!--suppress HtmlDeprecatedAttribute -->
-<h1 align="center">Qoinify 💰</h1>
+# Qoinify
 
-> Cryptocurrency exchange platform for educational
+![Made with Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+![ETH](https://img.shields.io/badge/Ethereum-3C3C3D?style=for-the-badge&logo=Ethereum&logoColor=white)
 
 Qoinify is a unique cryptocurrency exchange platform designed specifically for educational purposes.
 
@@ -9,9 +9,13 @@ The main goal is to trade ERC20 tokens from our Ganache sandboxes environment.
 
 ## Installation
 
+1. clone this repository
+
 ```shell
-$ go build
+$ git clone https://github.com/DavidRomanovizc/Qoinify.git
 ```
+
+2. Run the main.go
 
 ## Matching Engine
 
@@ -20,11 +24,11 @@ when the units are matched or match sell order with one or more buy orders to ma
 
 ![img.png](img/matching_engine.png)
 
-## Development setup
-
-*Coming soon*
-
 ## Release History
+
+- 0.1.2
+  - Changed the float64 data type to Decimal in the matching engine. 
+  - Started working on the API
 
 - 0.1.1
     - Distributed the code into different Go-style files and continued working on matching engine
@@ -36,10 +40,6 @@ when the units are matched or match sell order with one or more buy orders to ma
 - 0.0.1
     - Begin a project
 
-## Meta
-
-*Coming soon*
-
 ## Contributing
 
 1. Fork this repository
@@ -47,3 +47,7 @@ when the units are matched or match sell order with one or more buy orders to ma
 3. Commit your changes
 4. Push to the branch
 5. Create a new Pull Request
+
+<br>
+
+![img.png](img/banner.png)
