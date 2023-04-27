@@ -1,15 +1,19 @@
 package orderbook
 
+import (
+	"github.com/shopspring/decimal"
+)
+
 type Match struct {
 	Ask        *Order
 	Bid        *Order
-	SizeFilled float64
-	Price      float64
+	SizeFilled decimal.Decimal
+	Price      decimal.Decimal
 }
 
 type Order struct {
 	ID        int64
-	Size      float64
+	Size      decimal.Decimal
 	Bid       bool
 	Limit     *Limit
 	Timestamp int64
@@ -18,9 +22,9 @@ type Order struct {
 type Orders []*Order
 
 type Limit struct {
-	Price       float64
+	Price       decimal.Decimal
 	Orders      Orders
-	TotalVolume float64
+	TotalVolume decimal.Decimal
 }
 
 type Limits []*Limit
@@ -33,6 +37,6 @@ type OrderBook struct {
 	asks []*Limit
 	bids []*Limit
 
-	AskLimits map[float64]*Limit
-	BidLimits map[float64]*Limit
+	AskLimits map[decimal.Decimal]*Limit
+	BidLimits map[decimal.Decimal]*Limit
 }
