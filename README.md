@@ -10,13 +10,17 @@ The main goal is to trade ERC20 tokens from our Ganache sandboxes environment.
 
 ## Installation
 
-1. clone this repository
+- clone this repository
 
 ```shell
 $ git clone https://github.com/DavidRomanovizc/Qoinify.git
 ```
 
-2. Run the main.go
+- Run the main.go
+
+### Swagger
+To open the documentation, go to
+http://localhost:8080/swagger/index.html#/
 
 ## Matching Engine
 
@@ -28,8 +32,8 @@ when the units are matched or match sell order with one or more buy orders to ma
 ## Release History
 
 - 0.1.2
-  - Changed the float64 data type to Decimal in the matching engine. 
-  - Started working on the API
+    - Changed the float64 data type to Decimal in the matching engine.
+    - Started working on the API
 
 - 0.1.1
     - Distributed the code into different Go-style files and continued working on matching engine
