@@ -1,28 +1,42 @@
 package test
 
 import (
+	"github.com/DavidRomanovizc/Qoinify/internal/api/controllers"
+	"github.com/gin-gonic/gin"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
-func TestGetPlaceOrderEndpoint(t *testing.T) {
+func TestGetPlaceOrderIntegration(t *testing.T) {
+	router := gin.Default()
+	router.GET("/place-order", controllers.GetPlaceOrder)
+	server := httptest.NewServer(router)
+	defer server.Close()
 
-	responses := make(chan *http.Response)
+	resp, err := http.Get(server.URL + "/place-order")
+	if err != nil {
+		t.Errorf("Error making HTTP request: %s", err.Error())
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
 
-	for i := 0; i < 10; i++ {
-		go func() {
-			resp, err := http.Get("http://0.0.0.0:8080/api/ping")
-			if err != nil {
-				t.Errorf("error sending GET request: %v", err)
-			}
-			responses <- resp
-		}()
+		}
+	}(resp.Body)
+
+	if resp.StatusCode != 200 {
+		t.Errorf("Expected status code 200, but got %d", resp.StatusCode)
 	}
 
-	for i := 0; i < 10; i++ {
-		resp := <-responses
-		if resp.StatusCode != 200 {
-			t.Errorf("unexpected status code: %v", resp.StatusCode)
-		}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Errorf("Error reading response body: %s", err.Error())
+	}
+	expected := `{"message":"pong"}`
+	if string(body) != expected {
+		t.Errorf("Expected response body '%s', but got '%s'", expected, string(body))
 	}
 }
