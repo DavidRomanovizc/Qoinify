@@ -4,6 +4,22 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+type Market string
+type OrderType string
+type Limits []*Limit
+type ByBestAsk struct{ Limits }
+type ByBestBid struct{ Limits }
+type Orders []*Order
+
+const (
+	MarketETH Market = "ETH"
+)
+
+const (
+	MarketOrder OrderType = "MARKET"
+	LimitOrder  OrderType = "LIMIT"
+)
+
 type Match struct {
 	Ask        *Order
 	Bid        *Order
@@ -13,13 +29,12 @@ type Match struct {
 
 type Order struct {
 	ID        int64
+	Price     decimal.Decimal
 	Size      decimal.Decimal
 	Bid       bool
 	Limit     *Limit
 	Timestamp int64
 }
-
-type Orders []*Order
 
 type Limit struct {
 	Price       decimal.Decimal
@@ -27,16 +42,29 @@ type Limit struct {
 	TotalVolume decimal.Decimal
 }
 
-type Limits []*Limit
-
-type ByBestAsk struct{ Limits }
-
-type ByBestBid struct{ Limits }
-
 type OrderBook struct {
 	asks []*Limit
 	bids []*Limit
 
 	AskLimits map[decimal.Decimal]*Limit
 	BidLimits map[decimal.Decimal]*Limit
+}
+
+type PlaceOrderRequest struct {
+	Type   OrderType // Limit or market
+	Bid    bool
+	Size   decimal.Decimal
+	Price  decimal.Decimal
+	Market Market
+}
+
+type Exchange struct {
+	Orderbooks map[Market]*OrderBook
+}
+
+type OrderbookData struct {
+	TotalBidVolume decimal.Decimal
+	TotalAskVolume decimal.Decimal
+	Asks           []*Order
+	Bids           []*Order
 }

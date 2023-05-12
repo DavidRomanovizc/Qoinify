@@ -2,16 +2,20 @@ package router
 
 import (
 	"fmt"
+	_ "github.com/DavidRomanovizc/Qoinify/docs"
 	"github.com/DavidRomanovizc/Qoinify/internal/api/controllers"
 	"github.com/DavidRomanovizc/Qoinify/internal/api/middlewares"
+	"github.com/DavidRomanovizc/Qoinify/pkg/orderbook"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"io"
 	"os"
 )
 
 func Setup() *gin.Engine {
 	app := gin.New()
-
+	ex := orderbook.NewExchange()
 	// Logs
 	f, _ := os.Create("log/api.log")
 	gin.DisableConsoleColor()
@@ -37,8 +41,11 @@ func Setup() *gin.Engine {
 	app.NoRoute(middlewares.NoMethodHandler())
 
 	// Routers
-
+	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	app.GET("api/ping", controllers.GetPlaceOrder)
+	app.GET("api/book/:market", controllers.HandleGetBook(ex))
+	app.POST("api/order", controllers.HandlePlaceOrder(ex))
+	app.DELETE("api/order/:id", controllers.HandleCancelOrder(ex))
 
 	return app
 }
