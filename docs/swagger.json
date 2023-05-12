@@ -1,0 +1,79 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API Server for Qoinify application",
+        "title": "Qoinify API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/order/": {
+            "post": {
+                "description": "Places an order on the market or a limit order",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "order",
+                "parameters": [
+                    {
+                        "description": "Market",
+                        "name": "market",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Type of the order (MARKET or LIMIT)",
+                        "name": "type",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Direction of the order (BUY или SELL)",
+                        "name": "bid",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "description": "Price (only for limit order)",
+                        "name": "price",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Volume",
+                        "name": "size",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/ping/": {
+            "get": {
+                "summary": "ping",
+                "responses": {}
+            }
+        }
+    }
+}
