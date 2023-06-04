@@ -47,6 +47,54 @@ paths:
       - Orders
   /api/ping/:
     get:
-      responses: {}
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
       summary: ping
+  /orderbook/{market}:
+    get:
+      description: Get the aggregated bid and ask orders for a market
+      parameters:
+      - description: Market name
+        in: path
+        name: market
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get orderbook data for a market
+      tags:
+      - orderbook
+  /orders/{id}:
+    delete:
+      description: Deletes an order with the specified id
+      parameters:
+      - description: ID order
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: order deleted
+          schema:
+            type: string
+        "400":
+          description: Invalid order id
+          schema:
+            type: string
+        "404":
+          description: Order not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Delete order
+      tags:
+      - Orders
 swagger: "2.0"
