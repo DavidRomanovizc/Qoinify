@@ -48,6 +48,7 @@ type OrderBook struct {
 
 	AskLimits map[decimal.Decimal]*Limit
 	BidLimits map[decimal.Decimal]*Limit
+	Orders    map[int64]*Order
 }
 
 type PlaceOrderRequest struct {
@@ -67,4 +68,10 @@ type OrderbookData struct {
 	TotalAskVolume decimal.Decimal
 	Asks           []*Order
 	Bids           []*Order
+}
+
+type MatchedOrder struct {
+	ID    int64
+	Price decimal.Decimal
+	Size  decimal.Decimal
 }

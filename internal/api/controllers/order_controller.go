@@ -10,6 +10,7 @@ import (
 
 // GetPlaceOrder
 // @Summary ping
+// @Success 200 {string} pong "pong"
 // @Router /api/ping/ [get]
 func GetPlaceOrder(c *gin.Context) {
 	c.JSON(200, gin.H{
@@ -47,14 +48,31 @@ func HandlePlaceOrder(ex *orderbook.Exchange) gin.HandlerFunc {
 			})
 			return
 		}
-
 		order := orderbook.NewOrder(placeOrderData.Bid, placeOrderData.Size)
+
+		isBid := false
+		if order.Bid {
+			isBid = true
+		}
 
 		if placeOrderData.Type == orderbook.MarketOrder {
 			matches := ob.PlaceMarketOrder(order)
-			c.JSON(http.StatusOK, gin.H{
-				"matches": len(matches),
-			})
+			matchesOrders := make([]*orderbook.MatchedOrder, len(matches))
+
+			for i := 0; i < len(matches); i++ {
+				id := matches[i].Bid.ID
+				if isBid {
+					id = matches[i].Ask.ID
+				}
+				matchesOrders[i] = &orderbook.MatchedOrder{
+					ID:    id,
+					Size:  matches[i].SizeFilled,
+					Price: matches[i].Price,
+				}
+			}
+
+			c.JSON(http.StatusOK, map[string]any{"matches": matchesOrders})
+
 			return
 		}
 
@@ -81,6 +99,13 @@ func HandlePlaceOrder(ex *orderbook.Exchange) gin.HandlerFunc {
 	}
 }
 
+// HandleGetBook handles GET requests to retrieve the orderbook data for a particular market.
+// @Summary Get orderbook data for a market
+// @Description Get the aggregated bid and ask orders for a market
+// @Tags orderbook
+// @Param market path string true "Market name"
+// @Produce json
+// @Router /orderbook/{market} [get]
 func HandleGetBook(ex *orderbook.Exchange) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		market := orderbook.Market(c.Param("market"))
@@ -129,40 +154,28 @@ func HandleGetBook(ex *orderbook.Exchange) gin.HandlerFunc {
 	}
 }
 
+// HandleCancelOrder delete the order with the specified id
+// @Summary Delete order
+// @Description Deletes an order with the specified id
+// @Tags Orders
+// @Param id path int true "ID order"
+// @Success 200 {string} string "order deleted"
+// @Failure 400 {string} string "Invalid order id"
+// @Failure 404 {string} string "Order not found"
+// @Failure 500 {string} string "Internal server error"
+// @Router /orders/{id} [delete]
 func HandleCancelOrder(ex *orderbook.Exchange) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		idStr := c.Param("id")
 		id, _ := strconv.Atoi(idStr)
 
 		ob := ex.Orderbooks[orderbook.MarketETH]
-		orderCanceled := false
+		order := ob.Orders[int64(id)]
+		ob.CancelOrder(order)
 
-		for _, limit := range ob.Asks() {
-			for _, order := range limit.Orders {
-				if order.ID == int64(id) {
-					ob.CancelOrder(order)
-					orderCanceled = true
-				}
+		c.JSON(http.StatusOK, gin.H{
+			"message": "order deleted",
+		})
 
-				if orderCanceled {
-					c.JSON(200, gin.H{"msg": "order canceled"})
-					return
-				}
-			}
-		}
-
-		for _, limit := range ob.Bids() {
-			for _, order := range limit.Orders {
-				if order.ID == int64(id) {
-					ob.CancelOrder(order)
-					orderCanceled = true
-				}
-
-				if orderCanceled {
-					c.JSON(200, gin.H{"msg": "order canceled"})
-					return
-				}
-			}
-		}
 	}
 }

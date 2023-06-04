@@ -131,6 +131,7 @@ func NewOrderBook() *OrderBook {
 		bids:      []*Limit{},
 		AskLimits: make(map[decimal.Decimal]*Limit),
 		BidLimits: make(map[decimal.Decimal]*Limit),
+		Orders:    make(map[int64]*Order),
 	}
 }
 
@@ -198,6 +199,7 @@ func (ob *OrderBook) PlaceLimitOrder(price decimal.Decimal, o *Order) {
 		}
 	}
 
+	ob.Orders[o.ID] = o
 	limit.AddOrder(o)
 }
 
@@ -224,6 +226,7 @@ func (ob *OrderBook) clearLimit(bid bool, l *Limit) {
 func (ob *OrderBook) CancelOrder(o *Order) {
 	limit := o.Limit
 	limit.DeleteOrder(o)
+	delete(ob.Orders, o.ID)
 }
 
 func (ob *OrderBook) totalVolume(side []*Limit) decimal.Decimal {
