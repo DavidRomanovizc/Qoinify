@@ -24,8 +24,8 @@ http://localhost:8080/swagger/index.html#/
 
 ## Matching Engine
 
-Order Matcher is a program that uses an order book to match the buy order (bid) with the sell orders(ask) one or more
-when the units are matched or match sell order with one or more buy orders to make trades.
+Order Matcher is a program that uses an order book to match the buy order (bid) with the sell Orders(ask) one or more
+when the units are matched or match sell order with one or more buy Orders to make trades.
 
 ![img.png](img/matching_engine.png)
 
