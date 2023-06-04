@@ -39,6 +39,7 @@ func Setup() *gin.Engine {
 	app.Use(middlewares.CORS())
 	app.NoRoute(middlewares.NoRouteHandler())
 	app.NoRoute(middlewares.NoMethodHandler())
+	app.NoRoute(middlewares.ErrorHandler())
 
 	// Routers
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
